@@ -14,6 +14,11 @@ class ProductViews(generics.ListAPIView):
     serializer_class = serializer.ProductSerializer
     queryset = models.Product.objects.all()
     filter_backends = (DjangoFilterBackend, OrderingFilter, SearchFilter)
-    filter_fields = ('category', 'price', 'available',)
+    filter_fields = ('category', 'price', 'available', 'id')
     ordering_fields = ('price', 'stock')
     search_fields = ('name',)
+
+class DetailViews(generics.RetrieveAPIView):
+    permission_classes = (AllowAny,)
+    serializer_class = serializer.DetailSerializer
+    queryset = models.Product.objects.all() 

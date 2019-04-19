@@ -27,6 +27,7 @@ class Product(models.Model):
     slug = models.SlugField(max_length=200, db_index=True)
     description = models.TextField(blank=True)
     price = models.DecimalField(max_digits=10, decimal_places=2)
+    sale_price = models.DecimalField(max_digits=10, decimal_places=2)
     stock = models.PositiveIntegerField()
     available = models.BooleanField(default=True)
     created = models.DateTimeField(auto_now_add=True)
@@ -36,6 +37,10 @@ class Product(models.Model):
         ordering = ('-created',)
         index_together = (('id', 'slug'),)
 
+    
+    def get_price(self):
+        return self.sale_price if self.sale_price else self.price
+
     def __str__(self):
         return self.name
 
@@ -44,3 +49,22 @@ class Product(models.Model):
 
     def get_absolute_url(self):
         return reverse('shop:product_detail', args=[self.id, self.slug])
+
+
+# class Variation(models.Model):
+#     product = models.ForeignKey(Product, on_delete=models.CASCADE)
+#     price = models.DecimalField(max_digits=10, decimal_places=2)
+#     sale_price = models.DecimalField(max_digits=10, decimal_places=2)
+#     created = models.DateTimeField(auto_now_add=True)
+#     updated = models.DateTimeField(auto_now=True)
+
+#     def __unicode__(self):
+#         return self.product.name
+
+#     def get_price(self):
+#         return self.sale_price if self.sale_price else self.price
+
+#     def add_to_cart(self):
+        
+
+
